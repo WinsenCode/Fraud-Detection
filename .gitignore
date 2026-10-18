@@ -13,7 +13,11 @@ data/processed/*
 data/demo_requests.json
 data/demo_queue.csv
 data/sample_request.json
+# Keep additional model binaries local; publish the matching reference artifact.
 models/*.joblib
+!models/pipeline.joblib
 powerbi/exports/fact_scores.csv
+# Publish this report; keep other local Power BI files excluded.
 *.pbix
+!powerbi/fraud_detection.pbix
 *.zip
