@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "contract_version": "ieee-cis-v1-25-features",
+  "database": "fraud_detection_database",
+  "postgres_version": "18.6",
+  "execution_engine": "native_postgresql",
+  "transaction_rows": 590540,
+  "identity_rows": 144233,
+  "joined_rows": 590540,
+  "fraud_count": 20663,
+  "fraud_prevalence": 0.03499000914417313,
+  "missing_identity_rows": 446307,
+  "time_min": 86400,
+  "time_max": 15811131,
+  "model_data_sha256": "581f6e15e819c44c6f6d60dbd00385fb0a02a20bd04538406e6d0426e251bc14",
+  "sql_gates": [
+    {
+      "gate": "transaction_rows",
+      "actual": 590540,
+      "passed": true
+    },
+    {
+      "gate": "identity_rows",
+      "actual": 144233,
+      "passed": true
+    },
+    {
+      "gate": "transaction_duplicate_keys",
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "gate": "identity_duplicate_keys",
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "gate": "joined_rows",
+      "actual": 590540,
+      "passed": true
+    },
+    {
+      "gate": "invalid_labels",
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "gate": "invalid_time",
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "gate": "orphan_identity_keys",
+      "actual": 0,
+      "passed": true
+    }
+  ]
+}

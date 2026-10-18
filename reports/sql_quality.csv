@@ -1,0 +1,9 @@
+gate,actual,passed
+transaction_rows,590540,True
+identity_rows,144233,True
+transaction_duplicate_keys,0,True
+identity_duplicate_keys,0,True
+joined_rows,590540,True
+invalid_labels,0,True
+invalid_time,0,True
+orphan_identity_keys,0,True

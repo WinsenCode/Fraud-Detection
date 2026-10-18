@@ -1,0 +1,78 @@
+{
+  "contract_version": "ieee-cis-v1-25-features",
+  "sampling": "none; all training rows",
+  "features": [
+    "transaction_amt",
+    "dist1",
+    "c1",
+    "c2",
+    "c6",
+    "c11",
+    "c13",
+    "c14",
+    "d1",
+    "d2",
+    "d3",
+    "d10",
+    "d15",
+    "id_02",
+    "product_cd",
+    "card1",
+    "card2",
+    "card4",
+    "card6",
+    "addr1",
+    "p_emaildomain",
+    "r_emaildomain",
+    "device_type",
+    "id_12",
+    "id_15"
+  ],
+  "sources": {
+    "transaction": {
+      "path": "data/raw/train_transaction.csv",
+      "source_sha256": "3a5c83ab6b3cc13dcabe5ffa9f522307fd5f7f7b6e6f6a60c32284ca6283d642",
+      "rows": 590540,
+      "selected_columns": [
+        "transaction_id",
+        "is_fraud",
+        "transaction_dt",
+        "transaction_amt",
+        "product_cd",
+        "card1",
+        "card2",
+        "card4",
+        "card6",
+        "addr1",
+        "dist1",
+        "p_emaildomain",
+        "r_emaildomain",
+        "c1",
+        "c2",
+        "c6",
+        "c11",
+        "c13",
+        "c14",
+        "d1",
+        "d2",
+        "d3",
+        "d10",
+        "d15"
+      ],
+      "selected_sha256": "82c2e8db76afd7856c5852cc9ada3c55071ccdfa9e21f2c36dbe79e565eead44"
+    },
+    "identity": {
+      "path": "data/raw/train_identity.csv",
+      "source_sha256": "b63c725d8377be90a995268d97f347c17d456b95db45807adcf9f59cd603c37c",
+      "rows": 144233,
+      "selected_columns": [
+        "transaction_id",
+        "id_02",
+        "id_12",
+        "id_15",
+        "device_type"
+      ],
+      "selected_sha256": "63ba088fe3199aee8db2a9c2929a637b36bdeb41ef65c9c277770710f5638991"
+    }
+  }
+}

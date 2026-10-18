@@ -1,0 +1,89 @@
+{
+  "contract_version": "ieee-cis-v1-25-features",
+  "features": [
+    "transaction_amt",
+    "dist1",
+    "c1",
+    "c2",
+    "c6",
+    "c11",
+    "c13",
+    "c14",
+    "d1",
+    "d2",
+    "d3",
+    "d10",
+    "d15",
+    "id_02",
+    "product_cd",
+    "card1",
+    "card2",
+    "card4",
+    "card6",
+    "addr1",
+    "p_emaildomain",
+    "r_emaildomain",
+    "device_type",
+    "id_12",
+    "id_15"
+  ],
+  "config": {
+    "seed": 42,
+    "train_fraction": 0.6,
+    "validation_fraction": 0.2,
+    "alert_rate": 0.02,
+    "alert_policy": "Top 2% of the offline evaluation batch; NOT a per-day capacity",
+    "lightgbm": {
+      "n_estimators": 400,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "min_child_samples": 100,
+      "reg_lambda": 1.0,
+      "n_jobs": 4
+    }
+  },
+  "config_sha256": "5acf6fef1e217859f31d1f5795eec311f2b50004e3de8b066b1edb822b89206a",
+  "source_sha256": {
+    "src/__init__.py": "11d4788184b53ab0839c8099a173f0ec93acdf4bcaa04f3e3631ee3f805ad36f",
+    "src/common.py": "943a12decbd3aeb919b30f1a00ecfaa33751f9ff2ce39d5c91a0d33f32135cb3",
+    "src/data.py": "5f41d5fee0689abe905085f8433d1a448832895063482a92ec590c0c6b68da30",
+    "src/evaluate.py": "871407f9d3dc75083f0dd2a753165d3b5aa7696d4c802d14643ff93362ea375e",
+    "src/features.py": "867c392427e2be44f336b75ad6a62b70fc3f38b7512fed743a48f23c7b52b6e1",
+    "src/inference.py": "c2c8715fc56aa3737990654a6609471f95be3b4821fa84b508ce9ec6c7abebfb",
+    "src/train.py": "d2400f60f4647c80f488cfc376bb19c53b1c7845b94ce5c2db9fb4372f097937"
+  },
+  "data_sha256": "581f6e15e819c44c6f6d60dbd00385fb0a02a20bd04538406e6d0426e251bc14",
+  "boundaries": {
+    "train_end_exclusive": 8745798,
+    "validation_end_exclusive": 12192900
+  },
+  "selected_model": "lightgbm",
+  "selection_rule": "LightGBM must beat both baselines on validation AP",
+  "validation_ap": {
+    "dummy": 0.03904053916754157,
+    "logistic": 0.294137651685224,
+    "lightgbm": 0.5568928040557314
+  },
+  "thresholds": {
+    "dummy": 0.03383344057980831,
+    "logistic": 0.2361170214239497,
+    "lightgbm": 0.3842220601593206
+  },
+  "threshold_operator": ">",
+  "best_iteration": 392,
+  "package_versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.7.2",
+    "lightgbm": "4.7.0",
+    "joblib": "1.6.0"
+  },
+  "trained_on": "train only; no train+validation refit",
+  "test_used_for_selection": false,
+  "model_version": "p0-39b5acba90af",
+  "status": "complete",
+  "python_version": "3.10.9",
+  "artifact_sha256": "217ee63a42ff833577b19eb1b3f491fe279c109ce61caab1aa2089adaa25c3dd",
+  "risk_score_is_calibrated_probability": false,
+  "elapsed_seconds": 41.35
+}
