@@ -6,13 +6,17 @@ This guide uses Windows, Conda, Python 3.10.9, local PostgreSQL, and the PowerSh
 
 | Project state | Start here |
 |---|---|
-| Setting up the project from the repository | Sections 2–5 |
+| Reproducing the full Streamlit workflow from a fresh checkout | Sections 2–5, then section 6 |
+| Starting only the prediction API with the included model | Section 2, then the API command in section 6; no training or PostgreSQL required for prediction |
+| Viewing the included Power BI report | Section 8; no Python pipeline or refresh required |
 | Model artifacts, reports, and demo data already exist | Section 4a if the review table has not been checked, then section 6 |
 | Updating notebook outputs | Section 7 |
-| Opening or refreshing Power BI | Section 8 |
+| Refreshing Power BI from local CSV exports | Section 8 after generating the exports |
 | Running the full test suite | Section 9 |
 
 Changes to the README, documentation, Power BI layout, or application presentation do not require repeating data preparation, database loading, or training.
+
+The repository includes the fitted model, its metadata, reference reports, and the saved PBIX. It intentionally omits raw/processed data, `data/demo_queue.csv`, `data/demo_requests.json`, `data/sample_request.json`, and `powerbi/exports/fact_scores.csv`. Their absence is a distribution choice, not an upload error. Sections 3–5 describe the full reproduction route for generating them locally. A working local installation can keep its existing files.
 
 ## 2. Activate the environment
 
@@ -39,7 +43,7 @@ Activate the same environment in every additional terminal. An existing, complet
 
 `requirements.txt` must include the model dependencies and the application and test dependencies: `fastapi`, `pydantic`, `uvicorn`, `requests`, `streamlit`, `pytest`, and `httpx` for the test configuration used by this project. When loading a saved model, match the model dependency versions recorded in `models/metadata.json`. Keep requirements specific to this project rather than copying the entire package list from another project.
 
-## 3. Prepare the folders, source data, and database
+## 3. Prepare the folders, source data, and database for full reproduction
 
 ### Folders
 
@@ -142,13 +146,15 @@ Keep PostgreSQL running when using the dashboard. This step does not require dat
 
 ## 5. Train and export
 
-A fresh clone of this repository includes reference `models/metadata.json` but excludes the fitted `models/pipeline.joblib`. The training guard checks for metadata, not for the model binary. After preparing/loading the data, intentionally reproduce the reference run with:
+The fitted `models/pipeline.joblib` and its matching `models/metadata.json` are already included. You do not need to train merely to use the prediction API or view the saved Power BI report.
+
+To reproduce the full workflow, including the omitted demo files and transaction-level reporting export, complete sections 3–4a and then run:
 
 ```powershell
 python -m src.train --overwrite
 ```
 
-This rebuild regenerates the model, metadata, reports, and demo exports. Without `--overwrite`, the included metadata causes `FileExistsError` even on a fresh clone. The same command is used for an intentional rebuild of an existing installation. Do not run it merely to publish code or update documentation when your local model already works.
+This is an intentional full rebuild. It regenerates the model, metadata, reports, demo files, and reporting exports together. `--overwrite` is required because the repository already contains metadata for the reference run. The current CLI has no separate export-only command. Do not run this rebuild merely to publish code or update documentation when your local model and demo already work.
 
 Only on an empty project where `models/metadata.json` does not exist, use:
 
@@ -164,7 +170,9 @@ Stop the API before rebuilding the model. After training finishes, restart the A
 
 ## 6. Run the API and application
 
-The model artifacts and demo files must already exist. PostgreSQL must be running with the loaded transactions and `fraud.review_events` table for the dashboard and review endpoints. The prediction endpoint alone can score without PostgreSQL. A successful `/health` response does not confirm that review storage is ready.
+For the prediction API alone, install compatible dependencies and use the included model and metadata. `/health` and `/predict` do not require the demo files or PostgreSQL. Requests must match the schema shown at `/docs`.
+
+For Streamlit, the model and generated `data/demo_queue.csv` and `data/demo_requests.json` must exist and use the same model version. The test suite also uses the generated `data/sample_request.json`. A fresh checkout therefore needs sections 3–5 before running the complete application. PostgreSQL must be running with the loaded transactions and `fraud.review_events` table for the dashboard and review endpoints. A successful `/health` response does not confirm that review storage is ready.
 
 In the first terminal:
 
@@ -174,7 +182,7 @@ python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
 
 Wait for `Application startup complete`. Open <http://127.0.0.1:8000/health> or <http://127.0.0.1:8000/docs>.
 
-In a second terminal, activate the same environment and run:
+Once the dashboard files and PostgreSQL are ready, activate the same environment in a second terminal and run:
 
 ```powershell
 python -m streamlit run app/dashboard.py --server.address 127.0.0.1 --server.port 8501
@@ -201,13 +209,15 @@ The notebook reads existing reports. Running it does not start training. The mod
 
 ## 8. Set up or refresh Power BI
 
-Follow [POWER_BI.md](POWER_BI.md). Use the two CSV exports in `powerbi/exports`. If the local file `powerbi/fraud_detection.pbix` already exists, open it and choose **Home → Refresh**.
+To view the saved report, open the included `powerbi/fraud_detection.pbix` in Power BI Desktop. The report stores its imported data, so viewing pages and using filters does not require the source CSV files. Do not refresh merely to inspect the report.
+
+To refresh or rebuild it, first generate both CSV exports through the local reproduction workflow. Update the paths for `fact_scores.csv` and `model_metrics.csv`, choose **Home → Refresh**, and save. See [POWER_BI.md](POWER_BI.md).
 
 Refresh reloads report sources; it does not run data preparation, database loading, or training. If the project folder moves, update both CSV paths in the Power BI data source settings.
 
 ## 9. Run the tests
 
-Follow [TESTING.md](TESTING.md). For the full test configuration, PostgreSQL and the API must be running. In a separate PowerShell terminal:
+Follow [TESTING.md](TESTING.md). Complete local reproduction first so the omitted demo files, processed data, and reporting exports exist. For the full test configuration, PostgreSQL and the API must be running. In a separate PowerShell terminal:
 
 ```powershell
 $env:RUN_DATABASE_TESTS = "1"
@@ -223,4 +233,4 @@ Include source code, SQL, documentation, requirements, configuration without sec
 
 Exclude `.env`, `__pycache__`, test caches, and raw datasets from the public package. Keep the local `.env` for database access. `.gitignore` controls which untracked files Git ignores; it does not filter manually created ZIP files or uploads.
 
-The current `.gitignore` also excludes the model binary, the Power BI transaction CSV, demo files, and `.pbix` files. Repository users must reproduce these artifacts locally. Portfolio screenshots should show report content without credentials.
+Keep `models/pipeline.joblib` and its matching `models/metadata.json`, plus `powerbi/fraud_detection.pbix`, in the published package. The `.gitignore` explicitly allows these two binaries. Raw/processed data, the three demo files, and `powerbi/exports/fact_scores.csv` remain excluded and are generated locally. The PBIX already contains its imported reporting data; omitting its source CSV does not remove those embedded records.
