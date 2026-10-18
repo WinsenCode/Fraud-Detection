@@ -11,7 +11,9 @@ The report uses CSV exports from the Python evaluation pipeline. PostgreSQL rema
 
 Keep these tables **without a relationship**. The reference export contains 118,108 fact rows and six model-metric rows: three models evaluated on validation and test.
 
-If `powerbi/fraud_detection.pbix` is already available locally, open it and refresh its sources. To reconstruct the report, follow the steps below.
+The repository includes `powerbi/fraud_detection.pbix`. Open it in Power BI Desktop to view the saved pages and use slicers without refreshing. Its imported data is stored inside the PBIX; the source CSV files are not needed for viewing that saved state.
+
+`model_metrics.csv` is included, while `fact_scores.csv` is intentionally generated locally and is not included in the repository. To refresh or rebuild the report, follow the full reproduction instructions in [START_HERE_ID.md](START_HERE_ID.md), then point both queries at the corresponding local CSV exports. The steps below describe reconstruction and refresh; they are not required just to view the included report.
 
 ## Import the CSV files
 
@@ -158,6 +160,6 @@ If a card unexpectedly shows one transaction, check whether a table row or chart
 
 Save the local report as `powerbi/fraud_detection.pbix`. After Python regenerates the CSVs, choose **Home → Refresh** and save again. If the project directory moved, update the file location for both CSV sources through **Data source settings** or the corresponding Power Query source step.
 
-The current `.gitignore` excludes `.pbix` and transaction-level reporting exports. A public source checkout therefore needs its data and model workflow run locally before the report can be rebuilt. A screenshot can illustrate the report, but it does not replace the refreshable `.pbix` or the reconciliation checks.
+The public package includes the saved PBIX and explicitly allows it in `.gitignore`. The standalone `fact_scores.csv` remains excluded. The PBIX contains imported transaction-level reporting data even though that CSV is not published separately. Do not run Refresh on a fresh checkout until both CSV sources are available locally and their paths have been updated. Screenshots are optional previews; the included PBIX is the editable report.
 
 References: [Text/CSV connector](https://learn.microsoft.com/en-us/power-query/connectors/text-csv), [report filters](https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-report-add-filter), and [DAX DIVIDE](https://learn.microsoft.com/en-us/dax/divide-function-dax).
